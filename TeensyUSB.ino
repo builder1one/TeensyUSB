@@ -1,9 +1,12 @@
-/* 
-   You must select Joystick from the "Tools > USB Type" menu
 
-  
-  
-*/
+        ////////////////////////////////////////////////////////////////////////////////
+        // You must select Joystick from the "Tools > USB Type" menu
+        //
+        // Conversion of the Fanatec F1 2018 steering wheel using an teensy 3.5 board  
+        //
+        // By Eric Dornieden
+        ////////////////////////////////////////////////////////////////////////////////
+
         ////////////////////////////////////////////////////////////////////////////////
         // EEPROM include
         ////////////////////////////////////////////////////////////////////////////////          
@@ -867,6 +870,9 @@
         void setup()
         {
 
+        // serial initialization
+        Serial.begin(115200);
+
         ////////////////////////////////////////////////////////////////////////////////
         // Set SDA + SCL pins as output
         ////////////////////////////////////////////////////////////////////////////////    
@@ -1076,7 +1082,7 @@
         void setDisplayOutput() {
           disp.cls(0x00); //calls clearscreen
 
-          switch(geardata) {
+          switch(gear) {
             case 1: break;
             case 2: break;
             case 3: break;
@@ -1087,15 +1093,17 @@
             case 8: break;   
           }
             
-          for (i = -1; i < 10; i++) {
-            sendGear(i);
-            delay(1500);
-          }
           
+     
         }
 
-        void sendGear(int gear) 
-{
+        void sendGear() {
+        if (geardata == 1) {
+            setD
+            }
+            geardata=0;
+
+          
          int index = 0;
          disp.sendCmd(0x00);// -> page mode
          disp.sendCmd(0x00);// lower page
@@ -1111,37 +1119,37 @@
           for (int n=0;n<128;n++)
           {
             switch(gear) {
-              case -1:
+              case 0:
                 disp.sendByte(pgm_read_byte(&(reverseChar[index++])));
               break;
-              case 0:
+              case 1:
                 disp.sendByte(pgm_read_byte(&(neutralChar[index++])));
               break;
-              case 1:
+              case 2:
                 disp.sendByte(pgm_read_byte(&(oneChar[index++])));
               break;
-              case 2:
+              case 3:
                 disp.sendByte(pgm_read_byte(&(twoChar[index++])));
               break;
-              case 3:
+              case 4:
                 disp.sendByte(pgm_read_byte(&(threeChar[index++])));
               break;
-              case 4:
+              case 5:
                 disp.sendByte(pgm_read_byte(&(fourChar[index++])));
               break;
-              case 5:
+              case 6:
                 disp.sendByte(pgm_read_byte(&(fiveChar[index++])));
               break;
-              case 6:
+              case 7:
                 disp.sendByte(pgm_read_byte(&(sixChar[index++])));
               break;
-              case 7:
+              case 8:
                 disp.sendByte(pgm_read_byte(&(sevenChar[index++])));
               break;         
-              case 8:
+              case 9:
                 disp.sendByte(pgm_read_byte(&(eightChar[index++])));
               break;  
-              case 9:
+              case 10:
                 disp.sendByte(pgm_read_byte(&(nineChar[index++])));
               break;
             } 
