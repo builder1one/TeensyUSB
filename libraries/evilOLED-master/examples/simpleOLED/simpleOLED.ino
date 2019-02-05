@@ -2,13 +2,13 @@
 
 
 void setup() {
-  pinMode(8,OUTPUT);// set SDA + SCL pins as output
-  pinMode(9,OUTPUT);
+  pinMode(A4,OUTPUT);// set SDA + SCL pins as output
+  pinMode(A5,OUTPUT);
   
 }
 
 void loop() {
-evilOLED disp(8,9);// initialise display (SDA,SCL)
+evilOLED disp(A4,A5);// initialise display (SDA,SCL)
 delay(1000);
 disp.cls(0x00); //calls clearscreen
 delay(500);
