@@ -53,6 +53,9 @@
         char* neutral = "0";        // sets the character for neutral
         char* reverse = "r";        // sets the character for reverse   
 
+        /////////////////////////////////////////////////////////////////////////////
+        int lastgear = -1;
+
         const char logo[1024] PROGMEM = {
           0x00,0x00,0xFE,0xFE,0x06,0x06,0x06,0x06,0x06,0x06,0x06,0x8C,0xFC,0x78,0x00,0x00,
           0x00,0x00,0x00,0x00,0xE0,0xF8,0x3E,0x06,0x3E,0xF8,0xE0,0x00,0x00,0x00,0x00,0x00,
@@ -1042,7 +1045,7 @@
         }
         
         void loop() {
-          readButtons();
+          //readButtons();
           readSerialData();      
           setDisplayOutput();
         }
@@ -1055,13 +1058,13 @@
         {
           // Pin 54-57 Encoder middle (Only three pins needed, if one (A), two (B) and three (C) isn't active it must be four (D))
           if (digitalRead(54)) { //A (two independent axis)
-            Joystick.Z(analogRead(A21));
-            Joystick.Zrotate(analogRead(A22));    
+            //Joystick.Z(analogRead(A21));
+            //Joystick.Zrotate(analogRead(A22));    
           } else if(digitalRead(55)) { //B (As single Clutch)
             if(analogRead(A21)>analogRead(A22)) {
-              Joystick.Z(analogRead(A21));
+              //Joystick.Z(analogRead(A21));
             } else { 
-              Joystick.Z(analogRead(A22));
+              //Joystick.Z(analogRead(A22));
             }
           } else if(digitalRead(55)) { //C (Single Clutch + right side Bite Point) Use Encoder (Up-, Down-) (Use Shift Light LEDs for configuration?)
             
@@ -1070,8 +1073,8 @@
           }
           
           // read analog inputs and set X-Y position
-          Joystick.X(analogRead(A10));
-          Joystick.Y(analogRead(A11));
+          //Joystick.X(analogRead(A10));
+          //Joystick.Y(analogRead(A11));
         
         /*
           // If Both Shift Paddles are activated at the same time engage clutch else ToDo: Update Numbers (1,2)
@@ -1233,15 +1236,15 @@
         // Outputs the gear of the Car to the oled display
         ////////////////////////////////////////////////////////////////////////////////
         void setDisplayOutput() {
-          disp.cls(0x00); //calls clearscreen
-
+          
           if (geardata == 1) {
-            sendGear(gear);
+              sendGear(gear);
           }
           geardata=0;
 
         ////////////////////////////////////////////////////////////////////////////////
         //DEBUG
+        /*
         for (int i = 0; i < 10; i++) {
           sendGear(i);
           delay(500);
@@ -1252,7 +1255,7 @@
           disp.cls(0x00);
           delay(300);
         }
-      
+        */
         ////////////////////////////////////////////////////////////////////////////////
      
         }
