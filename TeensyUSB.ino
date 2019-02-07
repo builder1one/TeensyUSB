@@ -16,6 +16,7 @@
         // Library for the OLED screen 
         ////////////////////////////////////////////////////////////////////////////////    
         #include <evilOLED.h>
+   
         evilOLED disp(A4,A5);// initialise display (SDA,SCL)
         
         ////////////////////////////////////////////////////////////////////////////////
@@ -52,7 +53,7 @@
         // char* neutral = "n";        // sets the character for neutral
         char* neutral = "0";        // sets the character for neutral
         char* reverse = "r";        // sets the character for reverse   
-
+         
         const char logo[1024] PROGMEM = {
           0x00,0x00,0xFE,0xFE,0x06,0x06,0x06,0x06,0x06,0x06,0x06,0x8C,0xFC,0x78,0x00,0x00,
           0x00,0x00,0x00,0x00,0xE0,0xF8,0x3E,0x06,0x3E,0xF8,0xE0,0x00,0x00,0x00,0x00,0x00,
@@ -1021,17 +1022,30 @@
         // serial initialization
         Serial.begin(115200);
 
+        // Setup of the OLED display and startup sequenz
         ////////////////////////////////////////////////////////////////////////////////
         // Set SDA + SCL pins as output
         ////////////////////////////////////////////////////////////////////////////////    
         pinMode(A4,OUTPUT);// set SDA + SCL pins as output (Pin 19 A5 and 18 A4
         pinMode(A5,OUTPUT);
 
-        sendIcon(0); //Sets Startscreen for 5 seconds
-        delay(5000);
+        delay(100);
+        evilOLED disp(A4,A5);// initialise display (SDA,SCL)
+        delay(100);
+        
+        sendIcon(0); //Sets Startscreen for 4 seconds
+        delay(4000);
+        disp.cls(0x00); //calls clearscreen
+
+        // Three times checkered Flag                                                                  ToDo: add support for other fonts http://oleddisplay.squix.ch/#/home (larger text size for Speed usw.)
+        for (i = 0; i < 3; i++) {
+          sendIcon(1);
+          delay(500);
+          disp.cls(0x00); //calls clearscreen
+          delay(500);
+        }
         ///////////////////////////////////////////////////////////////////////////////  
         
-
         ////////////////////////////////////////////////////////////////////////////////
         // Setup of the pins used as analog inputs
         ////////////////////////////////////////////////////////////////////////////////
@@ -1045,7 +1059,7 @@
           readButtons();
           readSerialData();      
           setDisplayOutput();
-          setLEDOutput();
+          //setLEDOutput();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -1295,6 +1309,15 @@
            }      
       }
 
+      ////////////////////////////////////////////////////////////////////////////////
+      // Activates/Deactivates LEDs based on the rpm of the car
+      ////////////////////////////////////////////////////////////////////////////////
+      void setLEDState() 
+      ////////////////////////////////////////////////////////////////////////////////
+      {
+        
+      }
+
         ////////////////////////////////////////////////////////////////////////////////
         // Sends gear Icon to the OLED display
         ////////////////////////////////////////////////////////////////////////////////
@@ -1356,13 +1379,6 @@
            }        
       }
 
-      ////////////////////////////////////////////////////////////////////////////////
-      // Sets LEDs active based 
-      ////////////////////////////////////////////////////////////////////////////////
-      setLEDOutput()
-      ////////////////////////////////////////////////////////////////////////////////
-      {
-        
-      }
+ 
 
       
