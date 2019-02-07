@@ -53,9 +53,6 @@
         char* neutral = "0";        // sets the character for neutral
         char* reverse = "r";        // sets the character for reverse   
 
-        /////////////////////////////////////////////////////////////////////////////
-        int lastgear = -1;
-
         const char logo[1024] PROGMEM = {
           0x00,0x00,0xFE,0xFE,0x06,0x06,0x06,0x06,0x06,0x06,0x06,0x8C,0xFC,0x78,0x00,0x00,
           0x00,0x00,0x00,0x00,0xE0,0xF8,0x3E,0x06,0x3E,0xF8,0xE0,0x00,0x00,0x00,0x00,0x00,
@@ -1030,8 +1027,8 @@
         pinMode(A4,OUTPUT);// set SDA + SCL pins as output (Pin 19 A5 and 18 A4
         pinMode(A5,OUTPUT);
 
-        sendIcon(0); //Sets Startscreen for 3 seconds
-        delay(3000);
+        sendIcon(0); //Sets Startscreen for 5 seconds
+        delay(5000);
         ///////////////////////////////////////////////////////////////////////////////  
         
 
@@ -1045,9 +1042,10 @@
         }
         
         void loop() {
-          //readButtons();
+          readButtons();
           readSerialData();      
           setDisplayOutput();
+          setLEDOutput();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -1101,7 +1099,7 @@
           //Joystick.hat(digitalRead(i));          // "angle" is 0,45,90,135,180,225,270,315,-1
         
           // a brief delay, so this runs 20 times per second
-          delay(50);
+          //delay(50); // old 50 ms
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -1235,7 +1233,9 @@
         ////////////////////////////////////////////////////////////////////////////////
         // Outputs the gear of the Car to the oled display
         ////////////////////////////////////////////////////////////////////////////////
-        void setDisplayOutput() {
+        void setDisplayOutput()
+        ////////////////////////////////////////////////////////////////////////////////
+        {
           
           if (geardata == 1) {
               sendGear(gear);
@@ -1260,7 +1260,12 @@
      
         }
 
-        void sendIcon(int screenID) {
+        ////////////////////////////////////////////////////////////////////////////////
+        // Sends icon to the OLED for example startup icon or checkered flag
+        ////////////////////////////////////////////////////////////////////////////////
+        void sendIcon(int screenID)
+        ////////////////////////////////////////////////////////////////////////////////
+        {
            int index = 0;
            disp.sendCmd(0x00);// -> page mode
            disp.sendCmd(0x00);// lower page
@@ -1290,7 +1295,12 @@
            }      
       }
 
-        void sendGear(int gearID) {
+        ////////////////////////////////////////////////////////////////////////////////
+        // Sends gear Icon to the OLED display
+        ////////////////////////////////////////////////////////////////////////////////
+        void sendGear(int gearID)
+        ////////////////////////////////////////////////////////////////////////////////
+        {
            int index = 0;
            disp.sendCmd(0x00);// -> page mode
            disp.sendCmd(0x00);// lower page
@@ -1303,9 +1313,9 @@
             disp.sendByte(0x78);
             disp.sendByte(0x40);
             
-            for (int n=0;n<128;n++)
+            for (int n=0;n<128;n++) 
             {
-              switch(gearID) {
+              switch(gearID) { 
                 case 0:
                   disp.sendByte(pgm_read_byte(&(reverseChar[index++])));
                 break;
@@ -1342,7 +1352,17 @@
               } 
            
             }
-            disp.dataStop();
-            
-           }      
+            disp.dataStop();  
+           }        
       }
+
+      ////////////////////////////////////////////////////////////////////////////////
+      // Sets LEDs active based 
+      ////////////////////////////////////////////////////////////////////////////////
+      setLEDOutput()
+      ////////////////////////////////////////////////////////////////////////////////
+      {
+        
+      }
+
+      
