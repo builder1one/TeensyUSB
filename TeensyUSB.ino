@@ -1343,29 +1343,36 @@
 
         // ToDO: rpmleds isn't needed when controlling LEDs directly
         
-        if(rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS)
+        if(rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS) {
           //All leds + flashing
-        else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-1)
+        }   
+        else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-1) {
           //only led 1-8
-        else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-2)
-          //only led 1-7
-        else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-3)
-          //only led 1-6
-        else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-4)
-          //only led 1-5
-        else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-5)
-          //only led 1-4
-        else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-6)
-          //only led 1-3
-        else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-7)
-          //only led 1-2
-        else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-8)
-          //only led 1-1
-        else
-          //clear all LEDs
-          
         }
-        
+        else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-2) {
+          //only led 1-7
+        }
+        else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-3) {
+          //only led 1-6
+        }
+        else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-4) {
+          //only led 1-5
+        }
+        else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-5) {
+          //only led 1-4
+        }
+        else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-6) {
+          //only led 1-3
+        }
+        else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-7) {
+          //only led 1-2
+        }
+        else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-8) {
+          //only led 1-1
+        }
+        else {
+          //clear all LEDs
+        }     
       }
 
         ////////////////////////////////////////////////////////////////////////////////
