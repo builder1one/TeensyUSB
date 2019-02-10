@@ -1040,6 +1040,14 @@
 
         void setup()
         {
+
+          for(int i = 0; i < 18; i++) { // Pins connect to 3,3V and the input
+            pinMode(i, INPUT_PULLDOWN);
+          }
+          
+          for(int i = 21; i <= 57; i++) { 
+            pinMode(i, INPUT_PULLDOWN);
+          }
           
         // serial initialization
         Serial.begin(115200);
@@ -1130,12 +1138,13 @@
           for(int i = 21; i <= 57; i++) { // ToDo: Remove Buttons used for pedals / hat switch...
             Joystick.button(i+1, digitalRead(i));
           }
+          //Joystick.button(11,1);
         
-          //Hat-switch on right side of the wheel
+           //Hat-switch on right side of the wheel
           //Joystick.hat(digitalRead(i));          // "angle" is 0,45,90,135,180,225,270,315,-1
         
           // a brief delay, so this runs 20 times per second
-          //delay(50); // old 50 ms
+          delay(50); // old 50 ms
         }
 
         ////////////////////////////////////////////////////////////////////////////////
