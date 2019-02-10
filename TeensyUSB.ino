@@ -6,6 +6,15 @@
         // Button Inputs fully working for all buttons, enocders, axis
         // Shift LEDs WIP
         //
+        //
+        // line
+        // "#define JOYSTICK_SIZE         12" 
+        // located in "usb_desc" (C:\Program Files (x86)\Arduino\hardware\teensy\avr\cores\teensy3) needs to replaced with:
+        // "#define JOYSTICK_SIZE         64" 
+        //  USB type needs to be set to "All of the above" to support serial comunication with the sim and support for the button inputs
+        //
+        //
+        //  
         // By Eric Dornieden
         ////////////////////////////////////////////////////////////////////////////////
 
@@ -23,7 +32,15 @@
         
         ////////////////////////////////////////////////////////////////////////////////
         // variable init
-        ////////////////////////////////////////////////////////////////////////////////          
+        ////////////////////////////////////////////////////////////////////////////////    
+
+        //Variables for the LEDs
+        #define NUM_LEDS 15 //Number of LEDs used in the shift light + 6 flag LEDS (Shift light LEDs are 4-12)
+        #define BRIGHTNESS 50 //Brightness of the used LEDs
+
+        int rpmLED; // Value when the first led should be activated (First LED = rpmLED, Second LED = rpmLED*2, ... ,Last LED = rpmLED*NUM_LEDS)
+        int rpmArea = 2; // to change how much of rpm spectrum should be displayed by the LEDs (1 for complete rpm spectrum, 2 for half rpm spectrum and so on)
+        
         int i;
         unsigned int carspeed;      // holds the speed data (0-65535 size)
         unsigned int gear;          // holds gear value data (0-65535 size)
@@ -34,7 +51,7 @@
         unsigned int lap;           // holds the lap data (0-65535 size)
         unsigned int posit;         // holds the position data (0-65535 size)
         
-        unsigned int rpmleds;          // holds the 8 leds values
+        //unsigned int rpmleds;          // holds the 9 leds values
         unsigned int rpmmax = 5000;    // retrieves from rpm live with minimum setting on initialization and Shutdown - Output
         unsigned int beforeButton = 0; // holds the previous pressed button        
         unsigned int valButton = 0;    // retrieve the pressed buttons
@@ -1312,11 +1329,42 @@
       }
 
       ////////////////////////////////////////////////////////////////////////////////
-      // Activates/Deactivates LEDs based on the rpm of the car
+      // Activates/Deactivates LEDs based on the rpm of the car (RPM to 9 LEDs)
       ////////////////////////////////////////////////////////////////////////////////
       void setLEDState() 
       ////////////////////////////////////////////////////////////////////////////////
       {
+       
+       //rpmmax = Shift point could be edited using for example a encoder or caclculated by the highest reached rpm (requires the user to hit the rev limiter once before the LEDs are working properly
+        if(rpm > rpmmax)
+          rpmmax = rpm;
+
+        rpmLED = rpmmax/rpmArea/NUM_LEDS; // rpmValue for the first LED  
+
+        // ToDO: rpmleds isn't needed when controlling LEDs directly
+        
+        if(rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS)
+          //All leds + flashing
+        else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-1)
+          //only led 1-8
+        else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-2)
+          //only led 1-7
+        else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-3)
+          //only led 1-6
+        else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-4)
+          //only led 1-5
+        else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-5)
+          //only led 1-4
+        else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-6)
+          //only led 1-3
+        else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-7)
+          //only led 1-2
+        else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-8)
+          //only led 1-1
+        else
+          //clear all LEDs
+          
+        }
         
       }
 
