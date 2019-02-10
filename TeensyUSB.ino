@@ -40,6 +40,7 @@
 
         int rpmLED; // Value when the first led should be activated (First LED = rpmLED, Second LED = rpmLED*2, ... ,Last LED = rpmLED*NUM_LEDS)
         int rpmArea = 2; // to change how much of rpm spectrum should be displayed by the LEDs (1 for complete rpm spectrum, 2 for half rpm spectrum and so on)
+        int rpmmax_offset = 50;
         
         int i;
         unsigned int carspeed;      // holds the speed data (0-65535 size)
@@ -72,6 +73,8 @@
         // char* neutral = "n";        // sets the character for neutral
         char* neutral = "0";        // sets the character for neutral
         char* reverse = "r";        // sets the character for reverse   
+
+        // ToDo: Find more convenient way to display gear/speed on the oled (current method isn't usable for speed, because for each km/h a custom 1024 byte char would be needed) 
          
         const char logo[1024] PROGMEM = { // Logo Baltic Racing
           0x00,0x00,0xFE,0xFE,0x06,0x06,0x06,0x06,0x06,0x06,0x06,0x8C,0xFC,0x78,0x00,0x00,
@@ -1339,9 +1342,7 @@
         if(rpm > rpmmax)
           rpmmax = rpm;
 
-        rpmLED = rpmmax/rpmArea/NUM_LEDS; // rpmValue for the first LED  
-
-        // ToDO: rpmleds isn't needed when controlling LEDs directly
+        rpmLED = (rpmmax-rpmmax_offset)/rpmArea/NUM_LEDS; // rpmValue for the first LED  (rpmmax_offset to have the signal appear just before you reaching the rev limiter and to prevent not reaching all LEDs on when rpmmax is unsteady)
         
         if(rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS) {
           //All leds + flashing
