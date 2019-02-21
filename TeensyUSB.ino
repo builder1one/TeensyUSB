@@ -38,9 +38,14 @@
         #define NUM_LEDS 15 //Number of LEDs used in the shift light + 6 flag LEDS (Shift light LEDs are 4-12)
         #define BRIGHTNESS 50 //Brightness of the used LEDs
 
-        int rpmLED; // Value when the first led should be activated (First LED = rpmLED, Second LED = rpmLED*2, ... ,Last LED = rpmLED*NUM_LEDS)
-        int rpmArea = 2; // to change how much of rpm spectrum should be displayed by the LEDs (1 for complete rpm spectrum, 2 for half rpm spectrum and so on)
-        int rpmmax_offset = 50;
+        #include <Adafruit_NeoPixel.h>
+
+        unsigned int rpmLED; // Value when the first led should be activated (First LED = rpmLED, Second LED = rpmLED*2, ... ,Last LED = rpmLED*NUM_LEDS)
+        unsigned int rpmArea = 2; // to change how much of rpm spectrum should be displayed by the LEDs (1 for complete rpm spectrum, 2 for half rpm spectrum and so on)
+        unsigned int rpmmax_offset = 50;
+
+        unsigned int timeStart;
+        int timeAcceleration;
         
         int i;
         unsigned int carspeed;      // holds the speed data (0-65535 size)
@@ -1444,6 +1449,23 @@
             }
             disp.dataStop();  
            }        
+      }
+
+      void acceleration() { // captures 0-100 time and display it on the oled
+        if (digitalRead(0) && carspeed == 0) {
+          timeStart = millis();
+          while(carspeed<100) {
+            readButtons();
+            readSerialData();      
+            setDisplayOutput();
+          }
+          timeAcceleration = millis() - timeStart;
+
+          disp.cls(0x00); //calls clearscreen
+          disp.putString(timeAcceleration);
+          delay(500);
+          disp.cls(0x00); 
+        }
       }
 
  
