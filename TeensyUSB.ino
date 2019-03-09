@@ -34,11 +34,15 @@
         // variable init
         ////////////////////////////////////////////////////////////////////////////////    
 
-        //Variables for the LEDs
+        //Variables for the LEDs 
+        #include <Adafruit_NeoPixel.h>
+
+        #define LED_PIN 6 //Pin used to coneect the LEDs to the teensy
+        
         #define NUM_LEDS 15 //Number of LEDs used in the shift light + 6 flag LEDS (Shift light LEDs are 4-12)
         #define BRIGHTNESS 50 //Brightness of the used LEDs
 
-        #include <Adafruit_NeoPixel.h>
+        Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_LEDS, LED_PIN, NEO_GRBW + NEO_KHZ800);
 
         unsigned int rpmLED; // Value when the first led should be activated (First LED = rpmLED, Second LED = rpmLED*2, ... ,Last LED = rpmLED*NUM_LEDS)
         unsigned int rpmArea = 2; // to change how much of rpm spectrum should be displayed by the LEDs (1 for complete rpm spectrum, 2 for half rpm spectrum and so on)
@@ -1042,15 +1046,23 @@
           0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
           0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
         };
-
+        
         void setup()
         {
-
+          // Initalisation of the adafruit LEDs
+          strip.setBrightness(BRIGHTNESS);
+          strip.begin();
+          strip.show(); // Initialize all pixels to 'off'
+         
           for(int i = 0; i < 18; i++) { // Pins connect to 3,3V and the input
             pinMode(i, INPUT_PULLDOWN);
           }
           
-          for(int i = 21; i <= 57; i++) { 
+          for(int i = 21; i <= 29; i++) { 
+            pinMode(i, INPUT_PULLDOWN);
+          }
+
+           for(int i = 33; i <= 57; i++) { 
             pinMode(i, INPUT_PULLDOWN);
           }
           
@@ -1090,7 +1102,7 @@
           pinMode(A22, INPUT_PULLUP);
         }
         
-        void loop() {
+        void loop() {     
           readButtons();
           readSerialData();      
           setDisplayOutput();
@@ -1360,33 +1372,63 @@
         
         if(rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS) {
           //All leds + flashing
+          for (i = 0; i<=2; i++) {
+            strip.setPixelColor(i, 255, 255, 102); //LED 0-1 Yellow
+            strip.setPixelColor(i+3, 255, 255, 102); //LED 3-5 RED
+            strip.setPixelColor(i+6, 0, 0, 255); //LED 6-8 Blue
+          }
         }   
         else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-1) {
-          //only led 1-8
+          for (i = 0; i<=2; i++) {
+            strip.setPixelColor(i, 255, 255, 102); //LED 0-1 Yellow
+            strip.setPixelColor(i+3, 255, 255, 102); //LED 3-5 RED
+          }
+          for (i = 6; i<=7; i++) {
+            strip.setPixelColor(i, 0, 0, 255); //LED 6-7 Blue
+          }
         }
         else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-2) {
-          //only led 1-7
+          for (i = 0; i<=2; i++) {
+            strip.setPixelColor(i, 255, 255, 102); //LED 0-1 Yellow
+            strip.setPixelColor(i+3, 255, 255, 102); //LED 3-5 RED
+          }
+          strip.setPixelColor(6, 0, 0, 255); //LED 6 Blue
         }
         else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-3) {
-          //only led 1-6
+          for (i = 0; i<=2; i++) {
+            strip.setPixelColor(i, 255, 255, 102); //LED 0-1 Yellow
+            strip.setPixelColor(i+3, 255, 255, 102); //LED 3-5 RED
+          }
         }
         else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-4) {
-          //only led 1-5
+          for (i = 0; i<=2; i++) {
+            strip.setPixelColor(i, 255, 255, 102); //LED 0-2 Yellow
+          }
+          for (i = 3; i<=4; i++) {
+            strip.setPixelColor(i, 255, 255, 102); //LED 3-4 RED
+          }
         }
         else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-5) {
-          //only led 1-4
+          for (i = 0; i<=2; i++) {
+            strip.setPixelColor(i, 255, 255, 102); //LED 0-2 Yellow
+          }
+          strip.setPixelColor(3, 255, 0, 0); //LED 3 RED
         }
         else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-6) {
-          //only led 1-3
+          for (i = 0; i<=2; i++) {
+            strip.setPixelColor(i, 255, 255, 102); //LED 0-2 Yellow
+          }
         }
         else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-7) {
-          //only led 1-2
+          for (i = 0; i<=1; i++) {
+            strip.setPixelColor(i, 255, 255, 102); //LED 0-1 Yellow
+          }
         }
         else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-8) {
-          //only led 1-1
+          strip.setPixelColor(0, 255, 255, 102); //LED 0 Yellow
         }
         else {
-          //clear all LEDs
+          strip.clear();
         }     
       }
 
@@ -1468,6 +1510,6 @@
         }
       }
 
- 
+  
 
       
