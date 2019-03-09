@@ -1057,12 +1057,8 @@
           for(int i = 0; i < 18; i++) { // Pins connect to 3,3V and the input
             pinMode(i, INPUT_PULLDOWN);
           }
-          
-          for(int i = 21; i <= 29; i++) { 
-            pinMode(i, INPUT_PULLDOWN);
-          }
-
-           for(int i = 33; i <= 57; i++) { 
+         
+          for(int i = 21; i <= 57; i++) { 
             pinMode(i, INPUT_PULLDOWN);
           }
           
@@ -1080,7 +1076,7 @@
         evilOLED disp(A4,A5);// initialise display (SDA,SCL)
         delay(100);
         
-        sendIcon(0); //Sets Startscreen for 4 seconds
+        sendIcon(0); //Sets Startscreen for 4 secondsstrip.setPixelColor(0, 190, 255, 0);
         delay(4000);
         disp.cls(0x00); //calls clearscreen
 
@@ -1106,7 +1102,7 @@
           readButtons();
           readSerialData();      
           setDisplayOutput();
-          //setLEDOutput();
+          setLEDState();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -1369,67 +1365,82 @@
           rpmmax = rpm;
 
         rpmLED = (rpmmax-rpmmax_offset)/rpmArea/NUM_LEDS; // rpmValue for the first LED  (rpmmax_offset to have the signal appear just before you reaching the rev limiter and to prevent not reaching all LEDs on when rpmmax is unsteady)
+
+        /*
+         * strip.setPixelColor(ID, RED, GREEN, BLUE);
+         * Defines the color for a specific LED, by defining RED, GREEN and BLUE from 0 - 255 (0 off - 255 Maximum)
+         */
         
         if(rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS) {
           //All leds + flashing
-          for (i = 0; i<=2; i++) {
-            strip.setPixelColor(i, 255, 255, 102); //LED 0-1 Yellow
+          for (i = 0; i<=2; i++) {        
+            strip.setPixelColor(i, 190, 255, 0); //LED 0-1 Yellow
             strip.setPixelColor(i+3, 255, 255, 102); //LED 3-5 RED
             strip.setPixelColor(i+6, 0, 0, 255); //LED 6-8 Blue
           }
+          strip.show();
         }   
         else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-1) {
           for (i = 0; i<=2; i++) {
-            strip.setPixelColor(i, 255, 255, 102); //LED 0-1 Yellow
+            strip.setPixelColor(i, 190, 255, 0); //LED 0-1 Yellow
             strip.setPixelColor(i+3, 255, 255, 102); //LED 3-5 RED
           }
           for (i = 6; i<=7; i++) {
             strip.setPixelColor(i, 0, 0, 255); //LED 6-7 Blue
           }
+          strip.show();
         }
         else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-2) {
           for (i = 0; i<=2; i++) {
-            strip.setPixelColor(i, 255, 255, 102); //LED 0-1 Yellow
+            strip.setPixelColor(i, 190, 255, 0); //LED 0-1 Yellow
             strip.setPixelColor(i+3, 255, 255, 102); //LED 3-5 RED
           }
           strip.setPixelColor(6, 0, 0, 255); //LED 6 Blue
+          strip.show();
         }
         else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-3) {
           for (i = 0; i<=2; i++) {
-            strip.setPixelColor(i, 255, 255, 102); //LED 0-1 Yellow
+            strip.setPixelColor(i, 190, 255, 0); //LED 0-1 Yellow
             strip.setPixelColor(i+3, 255, 255, 102); //LED 3-5 RED
           }
+          strip.show();
         }
         else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-4) {
           for (i = 0; i<=2; i++) {
-            strip.setPixelColor(i, 255, 255, 102); //LED 0-2 Yellow
+            strip.setPixelColor(i, 190, 255, 0); //LED 0-2 Yellow
           }
           for (i = 3; i<=4; i++) {
-            strip.setPixelColor(i, 255, 255, 102); //LED 3-4 RED
+            strip.setPixelColor(i, 190, 255, 0); //LED 3-4 RED
           }
+          strip.show();
         }
         else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-5) {
           for (i = 0; i<=2; i++) {
-            strip.setPixelColor(i, 255, 255, 102); //LED 0-2 Yellow
+            strip.setPixelColor(i, 190, 255, 0); //LED 0-2 Yellow
           }
           strip.setPixelColor(3, 255, 0, 0); //LED 3 RED
+          strip.show();
         }
         else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-6) {
           for (i = 0; i<=2; i++) {
-            strip.setPixelColor(i, 255, 255, 102); //LED 0-2 Yellow
+            strip.setPixelColor(i, 190, 255, 0); //LED 0-2 Yellow
           }
+          strip.show();
         }
         else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-7) {
           for (i = 0; i<=1; i++) {
-            strip.setPixelColor(i, 255, 255, 102); //LED 0-1 Yellow
+            strip.setPixelColor(i, 190, 255, 0); //LED 0-1 Yellow
           }
+          strip.show();
         }
         else if (rpm > rpmmax/rpmArea+rpmLED*NUM_LEDS-8) {
-          strip.setPixelColor(0, 255, 255, 102); //LED 0 Yellow
+          strip.setPixelColor(0, 190, 255, 0); //LED 0 Yellow
+          strip.show();
         }
-        else {
+        else { // Clears LED Stripe, if rpm is not high enough
           strip.clear();
-        }     
+          strip.show();
+        }         
       }
 
         ////////////////////////////////////////////////////////////////////////////////
